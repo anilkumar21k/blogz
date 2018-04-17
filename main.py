@@ -19,6 +19,9 @@ class Blog(db.Model):
         self.title = title
         self.blog = blog
 
+
+    
+
 @app.route('/newpost', methods=['POST', 'GET'])
 def newpost():
     if request.method == 'POST':
@@ -30,10 +33,11 @@ def newpost():
             return render_template('newpost.html')
 
 
-        new_post = Blog(title, blog)
-        db.session.add(new_post)
+        blog = Blog(title, blog)
+        db.session.add(blog)
         db.session.commit()
-        return redirect('/blog')
+        return render_template('display.html', blog = blog )
+        #return redirect('/blog')
     else:
     #blogs = Blog.query.all()
         return render_template('newpost.html')
@@ -45,15 +49,36 @@ def index():
 #    if request.method == 'POST':  
 #        blog = request.form['title', 'blog']   
  #       blogs.append(blog)
+
+    blog_id = request.args.get('id')
+    if blog_id:
+        blog = Blog.query.filter_by(id=blog_id).first()
+        return render_template('display.html', blog=blog )
+    
     blogs = Blog.query.all()
     return render_template('blog.html', blogs = blogs)
 
-@app.route('/display-blog', methods=['POST'])
-def display_blog():
+    
+    
 
-    blog_id = int(request.form['blog-id'])
-    blog = Blog.query.get(blog_id)
-    return render_template('display.html', blog.title,blog.blog )
+
+    
+
+
+#@app.route('/blog', methods=['GET','POST'])
+#def display_blog():
+
+ #   blog.id = int(request.args.get('blog.id', None))
+ #   blog = Blog.query.get(blog_id)
+    
+
+
+   # blog_id = int(request.form['blog-id'])
+   # blog = Blog.query.get(blog_id)
+
+    #cur = mysql.connection.cursor()
+    #cur.execute("SELECT title, blog FROM blog where blog.id = [blog.id]")
+  #  return render_template('display.html', blog.title, blog.blog )
     
 
 if __name__ == '__main__':

@@ -2,17 +2,17 @@
 
 {% block content %}
 {% if blogs|length == 0 %}
-<p>No blogs yer</p>
+<p>No blogs yet</p>
 {% else %}
     
         {% for blog in blogs %}
-        <form action='/display-blog' methods='POST'>  
+          
             
-       <div><h3><a href={{blog.id}}>{{blog.title}}</a>  </h3>
+       <div><h3><a href="/blog?id={{blog.id}}">Send {{blog.title}}</a>  </h3>
         </div>
        <div>{{blog.blog}}</div>
        
-       </form>
+       
        
         <p></p>
         
