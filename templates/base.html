@@ -10,21 +10,24 @@
     </head>
 
     <body>
-        <table>
-            <tbody>
-                <tr>
-                    <td>
-                            <h2><span style="color:red"> <a href='/blog'>Main Blog Page</a></span></h2>
-                    </td>
-                    <td>             
-                        
-                    </td>
-                    <td>
-                            <h2> <a href='/newpost'>Add a Blog Entry</a></h2>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        
+        <h2><span style="color:red"> <a href='/blog'>Main Blog Page</a></span></h2>
+        <p> </p>
+                    
+        <h2> <a href='/newpost'>Add a Blog Entry</a></h2>
+
+        <div style='float: right'>
+            {% if 'email' in session %}
+                {{ session['email'] }}
+                <form action='/logout' method='post' id='logout'>
+                <input type="submit" value="Log Out" />
+                </form>
+            {% else %}
+                <a href="login">login</a> | <a href="signup">signup</a>
+            {% endif %}
+                    
+
+        </div>
                   
 
         {% with messages = get_flashed_messages(with_categories=True) %}
