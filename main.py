@@ -1,5 +1,6 @@
 from flask import Flask, request, redirect, render_template, session, flash
 from flask_sqlalchemy import SQLAlchemy
+from hashutils import make_pw_hash, check_pw_hash
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
@@ -13,13 +14,13 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key = True)
     email = db.Column(db.String(120))
-    password = db.Column(db.String(120))
+    pw_hash = db.Column(db.String(120))
     blogs = db.relationship('Blog', backref='owner')
 
 
     def __init__(self, email, password):
         self.email = email
-        self.password = password
+        self.pw_hash = make_pw_hash(password)
 
 class Blog(db.Model):
     
@@ -45,7 +46,7 @@ def login():
         email = request.form['email']
         password = request.form['password']
         user = User.query.filter_by(email=email).first()
-        if user and user.password == password:
+        if user and check_pw_hash(password, user.pw_hash):
             session['email']= email
             flash("Logged in")
             return redirect('/newpost')
@@ -120,10 +121,28 @@ def index():
     blogs = Blog.query.all()
     return render_template('blog.html', blogs = blogs)
 
+    index_id = request.args.get('id')
+    if index_id:
+        blogs = Blog.query.filter_by(id=index_id).all()
+        return render_template('display.html', blogs=blogs)
+
 @app.route('/logout', methods=['POST'])
 def logout():
     del session["email"]
     return redirect('/blog')  
+
+def user_list():
+    #return User.query.get(user.email).all()
+    #user_email = User.query.filter_by(email='user.email')
+    #all_emails = user_email.all()
+    #return [user.email for user in User.query.all()]
+    user_list = User.query.all()
+    return user_list
+@app.route('/index', methods=['GET', 'POST'])
+def display_user_list():
+    
+
+    return render_template('index.html', users = user_list())
     
 
 
