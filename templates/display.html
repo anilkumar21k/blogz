@@ -2,15 +2,16 @@
 
 {% block content %}
 
-<h2><span style="color:red"> <a href='/blog'>Main Blog Page</a></span></h2>
+<h3><span style="color:red"> <a href='/blog'>Main Blog Page</a></span></h3>
         <p> </p>
                     
-        <h2> <a href='/newpost'>Add a Blog Entry</a></h2>
+        <h3> <a href='/newpost'>Add a Blog Entry</a></h3>
 <p>
-    <h2>{{ blog.title }}</h2> 
+    
+    <h4>{{ blog.title }}</h4> 
 </p>
 <p>
-    <strong>{{ blog.blog }}</strong>.
+    <h6>{{ blog.blog }}</h6>.
 </p>
 
 {% endblock %}

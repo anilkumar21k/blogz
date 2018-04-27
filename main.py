@@ -49,7 +49,7 @@ def login():
         if user and check_pw_hash(password, user.pw_hash):
             session['email']= email
             flash("Logged in")
-            return redirect('/newpost')
+            return redirect('/home')
         else:
             flash("User password incorrect, or user does not exist", 'error')
     return render_template('login.html')
@@ -81,7 +81,7 @@ def signup():
         db.session.add(user)
         db.session.commit()
         session['email']= email
-        return redirect('/newpost')
+        return redirect('/home')
     else:
         return render_template('signup.html')
 
@@ -108,23 +108,18 @@ def newpost():
 @app.route('/blog', methods=['POST', 'GET'])
 def index():
 
+    if request.args.get('user'):
+        user_id = request.args.get('user')
+        user = User.query.get(user_id)
+        blogs = Blog.query.filter_by(owner=user).all()
+        return render_template('singleUser.html', blogs=blogs)
+    else:
+        blogs = Blog.query.all()
+        return render_template('blog.html', blogs = blogs)
 
-#    if request.method == 'POST':  
-#        blog = request.form['title', 'blog']   
- #       blogs.append(blog)
-
-    blog_id = request.args.get('id')
-    if blog_id:
-        blog = Blog.query.filter_by(id=blog_id).first()
-        return render_template('display.html', blog=blog )
     
-    blogs = Blog.query.all()
-    return render_template('blog.html', blogs = blogs)
 
-    index_id = request.args.get('id')
-    if index_id:
-        blogs = Blog.query.filter_by(id=index_id).all()
-        return render_template('display.html', blogs=blogs)
+    
 
 @app.route('/logout', methods=['POST'])
 def logout():
@@ -138,7 +133,8 @@ def user_list():
     #return [user.email for user in User.query.all()]
     user_list = User.query.all()
     return user_list
-@app.route('/index', methods=['GET', 'POST'])
+
+@app.route('/home', methods=['GET', 'POST'])
 def display_user_list():
     
 

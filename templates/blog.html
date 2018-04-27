@@ -2,13 +2,15 @@
 
 {% block content %}
 
-<h2><span style="color:red"> <a href='/blog'>Main Blog Page</a></span></h2>
-        <p> </p>
+<h2><span style="color:blue"> <a href='/home'>Home</a></span></h2>
+<p></p>
+
+
                     
         <h2> <a href='/newpost'>Add a Blog Entry</a></h2>
 
         <p></p>
-<h2><span style="color:red"> <a href='/index'>User List</a></span></h2>
+
 {% if blogs|length == 0 %}
 <p>No blogs yet</p>
 {% else %}
@@ -16,16 +18,30 @@
         {% for blog in blogs %}
           
             
-       <div><h3><a href="/blog?id={{blog.id}}">{{blog.title}}</a>  </h3>
+       <div><h4><a href="/blog?id={{blog.id}}">{{blog.title}}</a>  </h4>
         </div>
        <div>{{blog.blog}}</div>
        
+       <div>written by<a href="/blog?user={{blog.owner.id}}"> {{ blog.owner.email }}</a></div>
        
        
         <p></p>
         
         {% endfor %}
     
+        {% for user in users %}
+          
+            
+        <div><h4><a href="/user?id={{user.id}}">{{user.email}}</a>  </h4>
+         </div>
+        <div>{{blog.blog}}</div>
+        
+        
+        
+         <p></p>
+         
+         {% endfor %}  
+
 {% endif %}
 
 {% endblock %}
