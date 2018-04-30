@@ -113,9 +113,26 @@ def index():
         user = User.query.get(user_id)
         blogs = Blog.query.filter_by(owner=user).all()
         return render_template('singleUser.html', blogs=blogs)
-    else:
-        blogs = Blog.query.all()
+    
+    
+    
+    #if request.args.get('id'):
+    #    blog_id = request.args.get('id')
+     #   blog = Blog.query.filter_by(id=blog_id).first()
+     #   return render_template('display.html', blog=blog)
+    blog_id = request.args.get('id')
+    if blog_id:
+        blog = Blog.query.filter_by(id=blog_id).first()
+        return render_template('display.html', blog=blog)# id=owner_id )
+
+    blogs = Blog.query.all()
+    return render_template('blog.html', blogs = blogs)
+
+    owner_id = request.args.get('id')
+    if owner_id:
+        blogs = Blog.query.filter_by(id=owner_id).all()
         return render_template('blog.html', blogs = blogs)
+
 
     
 
